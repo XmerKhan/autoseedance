@@ -9,38 +9,284 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as ExtensionRouteImport } from './routes/extension'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardQueueRouteImport } from './routes/dashboard.queue'
+import { Route as DashboardLibraryRouteImport } from './routes/dashboard.library'
+import { Route as DashboardExtensionRouteImport } from './routes/dashboard.extension'
+import { Route as DashboardBillingRouteImport } from './routes/dashboard.billing'
+import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExtensionRoute = ExtensionRouteImport.update({
+  id: '/extension',
+  path: '/extension',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardQueueRoute = DashboardQueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardLibraryRoute = DashboardLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardExtensionRoute = DashboardExtensionRouteImport.update({
+  id: '/extension',
+  path: '/extension',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardBillingRoute = DashboardBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAdminRoute = DashboardAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/extension': typeof ExtensionRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/workspace': typeof WorkspaceRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/dashboard/queue': typeof DashboardQueueRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/extension': typeof ExtensionRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/workspace': typeof WorkspaceRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/dashboard/queue': typeof DashboardQueueRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/contact': typeof ContactRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/extension': typeof ExtensionRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/workspace': typeof WorkspaceRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/library': typeof DashboardLibraryRoute
+  '/dashboard/queue': typeof DashboardQueueRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/extension'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/workspace'
+    | '/dashboard/admin'
+    | '/dashboard/billing'
+    | '/dashboard/extension'
+    | '/dashboard/library'
+    | '/dashboard/queue'
+    | '/dashboard/settings'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/contact'
+    | '/extension'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/workspace'
+    | '/dashboard/admin'
+    | '/dashboard/billing'
+    | '/dashboard/extension'
+    | '/dashboard/library'
+    | '/dashboard/queue'
+    | '/dashboard/settings'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/contact'
+    | '/dashboard'
+    | '/extension'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/workspace'
+    | '/dashboard/admin'
+    | '/dashboard/billing'
+    | '/dashboard/extension'
+    | '/dashboard/library'
+    | '/dashboard/queue'
+    | '/dashboard/settings'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  ContactRoute: typeof ContactRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  ExtensionRoute: typeof ExtensionRoute
+  PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
+  WorkspaceRoute: typeof WorkspaceRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/extension': {
+      id: '/extension'
+      path: '/extension'
+      fullPath: '/extension'
+      preLoaderRoute: typeof ExtensionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +294,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/queue': {
+      id: '/dashboard/queue'
+      path: '/queue'
+      fullPath: '/dashboard/queue'
+      preLoaderRoute: typeof DashboardQueueRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/library': {
+      id: '/dashboard/library'
+      path: '/library'
+      fullPath: '/dashboard/library'
+      preLoaderRoute: typeof DashboardLibraryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/extension': {
+      id: '/dashboard/extension'
+      path: '/extension'
+      fullPath: '/dashboard/extension'
+      preLoaderRoute: typeof DashboardExtensionRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/billing': {
+      id: '/dashboard/billing'
+      path: '/billing'
+      fullPath: '/dashboard/billing'
+      preLoaderRoute: typeof DashboardBillingRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardBillingRoute: typeof DashboardBillingRoute
+  DashboardExtensionRoute: typeof DashboardExtensionRoute
+  DashboardLibraryRoute: typeof DashboardLibraryRoute
+  DashboardQueueRoute: typeof DashboardQueueRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAdminRoute: DashboardAdminRoute,
+  DashboardBillingRoute: DashboardBillingRoute,
+  DashboardExtensionRoute: DashboardExtensionRoute,
+  DashboardLibraryRoute: DashboardLibraryRoute,
+  DashboardQueueRoute: DashboardQueueRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
+  ContactRoute: ContactRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  ExtensionRoute: ExtensionRoute,
+  PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  WorkspaceRoute: WorkspaceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
