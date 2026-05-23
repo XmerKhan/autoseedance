@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as ExtensionRouteImport } from './routes/extension'
@@ -26,9 +25,6 @@ import { Route as DashboardLibraryRouteImport } from './routes/dashboard.library
 import { Route as DashboardExtensionRouteImport } from './routes/dashboard.extension'
 import { Route as DashboardBillingRouteImport } from './routes/dashboard.billing'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
-import { Route as ApiWorkerReportRouteImport } from './routes/api/worker.report'
-import { Route as ApiQueuePauseRouteImport } from './routes/api/queue.pause'
-import { Route as ApiQueueAddRouteImport } from './routes/api/queue.add'
 
 const WorkspaceRoute = WorkspaceRouteImport.update({
   id: '/workspace',
@@ -38,11 +34,6 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -115,21 +106,6 @@ const DashboardAdminRoute = DashboardAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => DashboardRoute,
 } as any)
-const ApiWorkerReportRoute = ApiWorkerReportRouteImport.update({
-  id: '/api/worker/report',
-  path: '/api/worker/report',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiQueuePauseRoute = ApiQueuePauseRouteImport.update({
-  id: '/api/queue/pause',
-  path: '/api/queue/pause',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiQueueAddRoute = ApiQueueAddRouteImport.update({
-  id: '/api/queue/add',
-  path: '/api/queue/add',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -139,7 +115,6 @@ export interface FileRoutesByFullPath {
   '/extension': typeof ExtensionRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -149,9 +124,6 @@ export interface FileRoutesByFullPath {
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/queue/add': typeof ApiQueueAddRoute
-  '/api/queue/pause': typeof ApiQueuePauseRoute
-  '/api/worker/report': typeof ApiWorkerReportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -160,7 +132,6 @@ export interface FileRoutesByTo {
   '/extension': typeof ExtensionRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -170,9 +141,6 @@ export interface FileRoutesByTo {
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/api/queue/add': typeof ApiQueueAddRoute
-  '/api/queue/pause': typeof ApiQueuePauseRoute
-  '/api/worker/report': typeof ApiWorkerReportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -183,7 +151,6 @@ export interface FileRoutesById {
   '/extension': typeof ExtensionRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -193,9 +160,6 @@ export interface FileRoutesById {
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/api/queue/add': typeof ApiQueueAddRoute
-  '/api/queue/pause': typeof ApiQueuePauseRoute
-  '/api/worker/report': typeof ApiWorkerReportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -207,7 +171,6 @@ export interface FileRouteTypes {
     | '/extension'
     | '/pricing'
     | '/privacy'
-    | '/sitemap.xml'
     | '/terms'
     | '/workspace'
     | '/dashboard/admin'
@@ -217,9 +180,6 @@ export interface FileRouteTypes {
     | '/dashboard/queue'
     | '/dashboard/settings'
     | '/dashboard/'
-    | '/api/queue/add'
-    | '/api/queue/pause'
-    | '/api/worker/report'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -228,7 +188,6 @@ export interface FileRouteTypes {
     | '/extension'
     | '/pricing'
     | '/privacy'
-    | '/sitemap.xml'
     | '/terms'
     | '/workspace'
     | '/dashboard/admin'
@@ -238,9 +197,6 @@ export interface FileRouteTypes {
     | '/dashboard/queue'
     | '/dashboard/settings'
     | '/dashboard'
-    | '/api/queue/add'
-    | '/api/queue/pause'
-    | '/api/worker/report'
   id:
     | '__root__'
     | '/'
@@ -250,7 +206,6 @@ export interface FileRouteTypes {
     | '/extension'
     | '/pricing'
     | '/privacy'
-    | '/sitemap.xml'
     | '/terms'
     | '/workspace'
     | '/dashboard/admin'
@@ -260,9 +215,6 @@ export interface FileRouteTypes {
     | '/dashboard/queue'
     | '/dashboard/settings'
     | '/dashboard/'
-    | '/api/queue/add'
-    | '/api/queue/pause'
-    | '/api/worker/report'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -273,12 +225,8 @@ export interface RootRouteChildren {
   ExtensionRoute: typeof ExtensionRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   WorkspaceRoute: typeof WorkspaceRoute
-  ApiQueueAddRoute: typeof ApiQueueAddRoute
-  ApiQueuePauseRoute: typeof ApiQueuePauseRoute
-  ApiWorkerReportRoute: typeof ApiWorkerReportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -295,13 +243,6 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -402,27 +343,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminRouteImport
       parentRoute: typeof DashboardRoute
     }
-    '/api/worker/report': {
-      id: '/api/worker/report'
-      path: '/api/worker/report'
-      fullPath: '/api/worker/report'
-      preLoaderRoute: typeof ApiWorkerReportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/queue/pause': {
-      id: '/api/queue/pause'
-      path: '/api/queue/pause'
-      fullPath: '/api/queue/pause'
-      preLoaderRoute: typeof ApiQueuePauseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/queue/add': {
-      id: '/api/queue/add'
-      path: '/api/queue/add'
-      fullPath: '/api/queue/add'
-      preLoaderRoute: typeof ApiQueueAddRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -458,23 +378,9 @@ const rootRouteChildren: RootRouteChildren = {
   ExtensionRoute: ExtensionRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   WorkspaceRoute: WorkspaceRoute,
-  ApiQueueAddRoute: ApiQueueAddRoute,
-  ApiQueuePauseRoute: ApiQueuePauseRoute,
-  ApiWorkerReportRoute: ApiWorkerReportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
