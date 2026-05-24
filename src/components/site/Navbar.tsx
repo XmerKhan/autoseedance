@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Download } from "lucide-react";
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
+
 
 export function Navbar() {
   return (
@@ -30,14 +32,22 @@ export function Navbar() {
             <a href="/#faq" className="hover:text-foreground transition">FAQ</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/extension">
+            <Link
+              to="/extension"
+              onClick={() => trackEvent("install_extension_click", { location: "navbar" })}
+            >
               <Button size="sm" className="btn-gradient text-white border-0">
                 <Download className="size-3.5 mr-1.5" /> Install Extension
               </Button>
             </Link>
-            <Link to="/auth" className="hidden sm:block">
+            <Link
+              to="/auth"
+              className="hidden sm:block"
+              onClick={() => trackEvent("signup_click", { location: "navbar" })}
+            >
               <Button variant="ghost" size="sm">Sign in</Button>
             </Link>
+
           </div>
         </div>
       </div>

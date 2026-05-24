@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Chrome, Download, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { CHROME_STORE_URL, EDGE_STORE_URL } from "@/routes/index";
+import { trackEvent } from "@/lib/analytics";
+
 
 export const Route = createFileRoute("/extension")({
   component: ExtensionLanding,
@@ -39,16 +41,27 @@ function ExtensionLanding() {
             Our lightweight extension automates Dreamina inside your browser — queue hundreds of prompts and walk away.
           </p>
           <div className="mt-7 grid sm:grid-cols-2 gap-3 max-w-xl mx-auto">
-            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={CHROME_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("install_extension_click", { browser: "chrome", location: "extension_page" })}
+            >
               <Button size="lg" className="w-full btn-gradient text-white border-0 h-12">
                 <Download className="size-4 mr-2" /> Install for Chrome
               </Button>
             </a>
-            <a href={EDGE_STORE_URL} target="_blank" rel="noopener noreferrer">
+            <a
+              href={EDGE_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent("install_extension_click", { browser: "edge", location: "extension_page" })}
+            >
               <Button size="lg" className="w-full btn-gradient text-white border-0 h-12">
                 <Download className="size-4 mr-2" /> Install for Microsoft Edge
               </Button>
             </a>
+
           </div>
           <p className="mt-4 text-xs text-muted-foreground">Also works on Brave, Arc, and Opera (Chromium).</p>
           <div className="mt-6">
