@@ -5,8 +5,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Chrome, Download, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
-import { CHROME_STORE_URL, EDGE_STORE_URL } from "@/routes/index";
 import { trackEvent } from "@/lib/analytics";
+
 
 
 export const Route = createFileRoute("/extension")({
@@ -22,6 +22,29 @@ export const Route = createFileRoute("/extension")({
     links: [{ rel: "canonical", href: "https://vizio-automata.lovable.app/extension" }],
   }),
 });
+
+const EXTENSION_ZIP_URL = "/auto-seedance.zip";
+const EXTENSION_ZIP_NAME = "auto-seedance.zip";
+
+async function downloadExtensionZip(browser: "chrome" | "edge") {
+  trackEvent("install_extension_click", { browser, location: "extension_page" });
+  try {
+    const res = await fetch(EXTENSION_ZIP_URL);
+    if (!res.ok) throw new Error(`Download failed: ${res.status}`);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = EXTENSION_ZIP_NAME;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    // Fallback: direct navigation
+    window.location.href = EXTENSION_ZIP_URL;
+  }
+}
 
 function ExtensionLanding() {
   const steps = [
@@ -41,34 +64,30 @@ function ExtensionLanding() {
             Our lightweight extension automates Dreamina inside your browser — queue hundreds of prompts and walk away.
           </p>
           <div className="mt-7 grid sm:grid-cols-2 gap-3 max-w-xl mx-auto">
-            <a
-              href={CHROME_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("install_extension_click", { browser: "chrome", location: "extension_page" })}
+            <Button
+              type="button"
+              size="lg"
+              onClick={() => downloadExtensionZip("chrome")}
+              className="w-full btn-gradient text-white border-0 h-12"
             >
-              <Button size="lg" className="w-full btn-gradient text-white border-0 h-12">
-                <Download className="size-4 mr-2" /> Install for Chrome
-              </Button>
-            </a>
-            <a
-              href={EDGE_STORE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackEvent("install_extension_click", { browser: "edge", location: "extension_page" })}
+              <Download className="size-4 mr-2" /> Install for Chrome
+            </Button>
+            <Button
+              type="button"
+              size="lg"
+              onClick={() => downloadExtensionZip("edge")}
+              className="w-full btn-gradient text-white border-0 h-12"
             >
-              <Button size="lg" className="w-full btn-gradient text-white border-0 h-12">
-                <Download className="size-4 mr-2" /> Install for Microsoft Edge
-              </Button>
-            </a>
-
+              <Download className="size-4 mr-2" /> Install for Microsoft Edge
+            </Button>
           </div>
-          <p className="mt-4 text-xs text-muted-foreground">Also works on Brave, Arc, and Opera (Chromium).</p>
+          <p className="mt-4 text-xs text-muted-foreground">Also works on Brave, Arc, and Opera (Chromium). After download: unzip, open <code>chrome://extensions</code>, enable Developer mode, and click <strong>Load unpacked</strong>.</p>
           <div className="mt-6">
             <Link to="/dashboard"><Button variant="outline" className="h-11 px-6 border-border bg-muted/50">Open Dashboard <ArrowRight className="ml-1 size-4" /></Button></Link>
           </div>
         </div>
       </section>
+
 
       <section className="py-20">
         <div className="mx-auto max-w-5xl px-4 grid md:grid-cols-2 gap-4">
