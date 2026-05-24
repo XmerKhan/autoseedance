@@ -22,7 +22,16 @@ import {
   X, Upload, GripVertical, ArrowUp, ArrowDown,
 } from "lucide-react";
 
-export const Route = createFileRoute("/workspace")({ component: WorkspacePage });
+export const Route = createFileRoute("/workspace")({
+  component: WorkspacePage,
+  head: () => ({
+    meta: [
+      { title: "Workspace — Auto Seedance" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+});
+
 
 /* ───────────────────────────── Constants ───────────────────────────── */
 
