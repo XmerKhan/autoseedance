@@ -29,6 +29,7 @@ export function Navbar() {
             <a href="/#how" className="hover:text-foreground transition">How it works</a>
             <Link to="/pricing" className="hover:text-foreground transition">Pricing</Link>
             <Link to="/extension" className="hover:text-foreground transition">Extension</Link>
+            <Link to="/blog" className="hover:text-foreground transition">Blog</Link>
             <a href="/#faq" className="hover:text-foreground transition">FAQ</a>
           </nav>
           <div className="flex items-center gap-2">

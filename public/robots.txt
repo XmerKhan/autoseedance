@@ -4,5 +4,7 @@ Disallow: /dashboard
 Disallow: /dashboard/
 Disallow: /auth
 Disallow: /workspace
+Disallow: /admin
+Disallow: /admin/
 
 Sitemap: https://vizio-automata.lovable.app/sitemap.xml
