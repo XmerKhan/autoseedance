@@ -19,6 +19,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardQueueRouteImport } from './routes/dashboard.queue'
 import { Route as DashboardLibraryRouteImport } from './routes/dashboard.library'
@@ -76,6 +77,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DashboardRoute,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
@@ -140,6 +147,7 @@ export interface FileRoutesByTo {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/blog/'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/blog'
     | '/dashboard'
   id:
     | '__root__'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/blog/'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   WorkspaceRoute: typeof WorkspaceRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof DashboardRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/settings': {
       id: '/dashboard/settings'
@@ -380,6 +400,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   WorkspaceRoute: WorkspaceRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
