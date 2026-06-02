@@ -217,6 +217,38 @@ function PostPage() {
 
           {/* CENTER: Article */}
           <article className="min-w-0">
+            {/* Mobile TOC (collapsible) */}
+            {headings.length > 0 && (
+              <div className="lg:hidden mb-4 rounded-xl border border-border bg-card">
+                <button
+                  onClick={() => setMobileTocOpen((o) => !o)}
+                  className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold"
+                  aria-expanded={mobileTocOpen}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <List className="size-4 text-primary" /> Contents
+                  </span>
+                  <ChevronDown className={`size-4 transition-transform ${mobileTocOpen ? "rotate-180" : ""}`} />
+                </button>
+                {mobileTocOpen && (
+                  <nav className="px-4 pb-3 space-y-1 text-sm border-t border-border pt-3">
+                    {headings.map((h) => (
+                      <a
+                        key={h.id}
+                        href={`#${h.id}`}
+                        onClick={(e) => handleTocClick(e, h.id)}
+                        className={`block py-1 ${h.level === 3 ? "pl-4 text-xs" : ""} ${
+                          activeId === h.id ? "text-primary font-semibold" : "text-muted-foreground"
+                        }`}
+                      >
+                        {h.text}
+                      </a>
+                    ))}
+                  </nav>
+                )}
+              </div>
+            )}
+
             <div className="aspect-[16/9] overflow-hidden rounded-2xl bg-muted mb-6">
               <img
                 src={post.coverImage}
