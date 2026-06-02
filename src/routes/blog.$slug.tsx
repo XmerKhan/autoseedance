@@ -326,9 +326,9 @@ function PostPage() {
                     </blockquote>
                   ),
                   p: ({ children }) => <p className="mb-5 leading-[1.8] text-[17px]">{children}</p>,
-                  h1: ({ children }) => <h1 className="mt-10 mb-4 font-display text-[36px] font-bold">{children}</h1>,
-                  h2: ({ children }) => <h2 className="mt-10 mb-3 font-display text-[28px] font-bold">{children}</h2>,
-                  h3: ({ children }) => <h3 className="mt-8 mb-2 font-display text-[22px] font-bold">{children}</h3>,
+                  h1: ({ children, ...props }) => <h1 {...props} className="mt-10 mb-4 font-display text-[36px] font-bold scroll-mt-28">{children}</h1>,
+                  h2: ({ children, ...props }) => <h2 {...props} className="mt-10 mb-3 font-display text-[28px] font-bold scroll-mt-28">{children}</h2>,
+                  h3: ({ children, ...props }) => <h3 {...props} className="mt-8 mb-2 font-display text-[22px] font-bold scroll-mt-28">{children}</h3>,
                   ul: ({ children }) => <ul className="my-4 ml-6 list-disc space-y-2 leading-[1.8]">{children}</ul>,
                   ol: ({ children }) => <ol className="my-4 ml-6 list-decimal space-y-2 leading-[1.8]">{children}</ol>,
                   code: ({ className, children, ...props }) => {
