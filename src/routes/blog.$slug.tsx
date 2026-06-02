@@ -17,7 +17,7 @@ import {
   getAllPosts,
   type Post,
 } from "@/lib/posts";
-import { Twitter, Link2, Search, MessageCircle, Check } from "lucide-react";
+import { Twitter, Link2, Search, MessageCircle, Check, ChevronDown, List } from "lucide-react";
 
 const SITE_URL = "https://vizio-automata.lovable.app";
 
