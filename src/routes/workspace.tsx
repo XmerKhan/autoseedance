@@ -85,7 +85,7 @@ type LogEntry = { id: string; ts: number; level: "info" | "ok" | "warn" | "err";
 function WorkspacePage() {
   const { user, session, loading } = useSession();
   const navigate = useNavigate();
-  useEffect(() => { if (!loading && !session) navigate({ to: "/auth" }); }, [loading, session, navigate]);
+  useEffect(() => { if (!loading && !session) navigate({ to: "/auth", search: { redirect: "/workspace" } as any, replace: true }); }, [loading, session, navigate]);
 
   const [platform, setPlatform] = useState<Platform>("dreamina");
   const [jobs, setJobs] = useState<Job[]>([]);
