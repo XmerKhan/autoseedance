@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { signOut, useSession } from "@/lib/auth";
+import { ensureUserBootstrap, signOut, useSession } from "@/lib/auth";
 import {
   LayoutDashboard, ListChecks, Film, Chrome, Settings, Shield,
   Sparkles, LogOut, Loader2, CreditCard, Play,
@@ -25,11 +25,12 @@ export function DashboardLayout() {
   const path = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (!loading && !session) navigate({ to: "/auth" });
+    if (!loading && !session) navigate({ to: "/auth", search: { redirect: path } as any, replace: true });
   }, [loading, session, navigate]);
 
   useEffect(() => {
     if (!session) return;
+    void ensureUserBootstrap(session.user);
     supabase.from("user_roles").select("role").eq("user_id", session.user.id).eq("role", "admin").maybeSingle()
       .then(({ data }) => setIsAdmin(!!data));
   }, [session]);
@@ -64,7 +65,7 @@ export function DashboardLayout() {
         </nav>
         <div className="p-3 border-t border-border">
           <div className="px-3 py-2 text-xs text-muted-foreground truncate">{session.user.email}</div>
-          <Button variant="ghost" size="sm" className="w-full justify-start" onClick={async () => { await signOut(); navigate({ to: "/" }); }}>
+          <Button variant="ghost" size="sm" className="w-full justify-start" onClick={async () => { await signOut(); navigate({ to: "/", replace: true }); }}>
             <LogOut className="size-4 mr-2" /> Sign out
           </Button>
         </div>
