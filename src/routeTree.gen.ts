@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ExtensionRouteImport } from './routes/extension'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -20,6 +22,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as AuthIndexRouteImport } from './routes/auth.index'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardQueueRouteImport } from './routes/dashboard.queue'
 import { Route as DashboardLibraryRouteImport } from './routes/dashboard.library'
@@ -39,6 +42,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
@@ -47,6 +55,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExtensionRoute = ExtensionRouteImport.update({
@@ -83,6 +96,11 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthRoute,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
@@ -131,8 +149,10 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/extension': typeof ExtensionRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -143,16 +163,18 @@ export interface FileRoutesByFullPath {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRouteWithChildren
   '/contact': typeof ContactRoute
   '/extension': typeof ExtensionRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -163,6 +185,7 @@ export interface FileRoutesByTo {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -173,8 +196,10 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRouteWithChildren
   '/extension': typeof ExtensionRoute
+  '/login': typeof LoginRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/signup': typeof SignupRoute
   '/terms': typeof TermsRoute
   '/workspace': typeof WorkspaceRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -185,6 +210,7 @@ export interface FileRoutesById {
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -196,8 +222,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/extension'
+    | '/login'
     | '/pricing'
     | '/privacy'
+    | '/signup'
     | '/terms'
     | '/workspace'
     | '/auth/callback'
@@ -208,16 +236,18 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/auth/'
     | '/blog/'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/contact'
     | '/extension'
+    | '/login'
     | '/pricing'
     | '/privacy'
+    | '/signup'
     | '/terms'
     | '/workspace'
     | '/auth/callback'
@@ -228,6 +258,7 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/auth'
     | '/blog'
     | '/dashboard'
   id:
@@ -237,8 +268,10 @@ export interface FileRouteTypes {
     | '/contact'
     | '/dashboard'
     | '/extension'
+    | '/login'
     | '/pricing'
     | '/privacy'
+    | '/signup'
     | '/terms'
     | '/workspace'
     | '/auth/callback'
@@ -249,6 +282,7 @@ export interface FileRouteTypes {
     | '/dashboard/library'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/auth/'
     | '/blog/'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -259,8 +293,10 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRouteWithChildren
   ExtensionRoute: typeof ExtensionRoute
+  LoginRoute: typeof LoginRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  SignupRoute: typeof SignupRoute
   TermsRoute: typeof TermsRoute
   WorkspaceRoute: typeof WorkspaceRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -283,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy': {
       id: '/privacy'
       path: '/privacy'
@@ -295,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/extension': {
@@ -345,6 +395,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/dashboard/settings': {
       id: '/dashboard/settings'
@@ -407,10 +464,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthIndexRoute: typeof AuthIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
+  AuthIndexRoute: AuthIndexRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -445,8 +504,10 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRouteWithChildren,
   ExtensionRoute: ExtensionRoute,
+  LoginRoute: LoginRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  SignupRoute: SignupRoute,
   TermsRoute: TermsRoute,
   WorkspaceRoute: WorkspaceRoute,
   BlogSlugRoute: BlogSlugRoute,
