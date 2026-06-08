@@ -12,7 +12,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { AlertCircle, Sparkles, Mail, Lock, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/auth/")({
   component: AuthPage,
   head: () => ({
     meta: [
