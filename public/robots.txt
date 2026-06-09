@@ -3,6 +3,7 @@ Allow: /
 Disallow: /dashboard
 Disallow: /dashboard/
 Disallow: /auth
+Disallow: /auth/
 Disallow: /workspace
 Disallow: /admin
 Disallow: /admin/
