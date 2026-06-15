@@ -14,6 +14,147 @@ export type Database = {
   }
   public: {
     Tables: {
+      generations: {
+        Row: {
+          id: string
+          user_id: string
+          tool_type: string
+          prompt: string
+          settings: Json
+          result_url: string | null
+          thumbnail_url: string | null
+          status: string
+          credits_used: number
+          is_favorite: boolean
+          error: string | null
+          external_id: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          tool_type: string
+          prompt: string
+          settings?: Json
+          result_url?: string | null
+          thumbnail_url?: string | null
+          status?: string
+          credits_used?: number
+          is_favorite?: boolean
+          error?: string | null
+          external_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          tool_type?: string
+          prompt?: string
+          settings?: Json
+          result_url?: string | null
+          thumbnail_url?: string | null
+          status?: string
+          credits_used?: number
+          is_favorite?: boolean
+          error?: string | null
+          external_id?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      credit_wallets: {
+        Row: {
+          user_id: string
+          balance: number
+          monthly_grant: number
+          period_end: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          balance?: number
+          monthly_grant?: number
+          period_end?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          balance?: number
+          monthly_grant?: number
+          period_end?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      credit_ledger: {
+        Row: {
+          id: string
+          user_id: string
+          amount: number
+          reason: string
+          tool: string | null
+          generation_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          amount: number
+          reason: string
+          tool?: string | null
+          generation_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          amount?: number
+          reason?: string
+          tool?: string | null
+          generation_id?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
+      plans: {
+        Row: {
+          id: string
+          name: string
+          monthly_credits: number
+          price_monthly_cents: number
+          price_yearly_cents: number
+          features: string[]
+          is_active: boolean
+          sort_order: number
+        }
+        Insert: {
+          id: string
+          name: string
+          monthly_credits: number
+          price_monthly_cents?: number
+          price_yearly_cents?: number
+          features?: string[]
+          is_active?: boolean
+          sort_order?: number
+        }
+        Update: {
+          id?: string
+          name?: string
+          monthly_credits?: number
+          price_monthly_cents?: number
+          price_yearly_cents?: number
+          features?: string[]
+          is_active?: boolean
+          sort_order?: number
+        }
+        Relationships: []
+      }
       generated_files: {
         Row: {
           created_at: string
@@ -329,6 +470,21 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      consume_credits: {
+        Args: {
+          _tool: string
+          _amount: number
+        }
+        Returns: Json
+      }
+      grant_credits: {
+        Args: {
+          _user_id: string
+          _amount: number
+          _reason: string
+        }
+        Returns: Json
       }
     }
     Enums: {

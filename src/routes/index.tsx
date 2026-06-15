@@ -8,10 +8,7 @@ import { Card } from "@/components/ui/card";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
-import {
-  Sparkles, Zap, Layers, Workflow, ShieldCheck, Download, Chrome,
-  Play, ArrowRight, Check, Cpu, Bot, Clock,
-} from "lucide-react";
+import { Sparkles, Zap, Layers, Workflow, ShieldCheck, Download, Chromium as Chrome, Play, ArrowRight, Check, Cpu, Bot, Clock, Image as ImageIcon, Video, Coins } from "lucide-react";
 
 export const CHROME_STORE_URL = "https://chromewebstore.google.com/"; // TODO: replace with real listing URL
 export const EDGE_STORE_URL = "https://microsoftedge.microsoft.com/addons/"; // TODO: replace with real listing URL
@@ -84,6 +81,7 @@ function Landing() {
       <IntroBlock />
       <LogosStrip />
       <DemoSection />
+      <AIToolsSection />
       <Features />
       <HowItWorks />
       <SeoHowTo />
@@ -348,6 +346,89 @@ function DemoSection() {
             </div>
           </Card>
         </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function AIToolsSection() {
+  const tools = [
+    {
+      icon: ImageIcon,
+      title: "Image Generation",
+      desc: "Create stunning AI images from text prompts. Choose from realistic, digital illustration, vector, or icon styles.",
+      credits: 5,
+      href: "/tools/image",
+      features: ["1024×1024 to 4K resolution", "4 style presets", "Realistic or stylized output"],
+    },
+    {
+      icon: Video,
+      title: "Video Generation",
+      desc: "Generate cinematic AI videos with text prompts. 720p and 1080p resolution with optional audio.",
+      credits: 30,
+      href: "/tools/video",
+      features: ["7-second clips", "Multiple aspect ratios", "AI-generated audio"],
+    },
+  ];
+
+  return (
+    <section id="ai-tools" className="py-24">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="text-center max-w-2xl mx-auto">
+          <Badge variant="outline" className="border-border bg-muted/50">AI Tools</Badge>
+          <h2 className="mt-4 font-display text-4xl font-bold">Generate with credits, not subscriptions</h2>
+          <p className="mt-3 text-muted-foreground">
+            Use credits across all AI tools. Start with 50 free credits, no credit card required.
+          </p>
+        </div>
+
+        <div className="mt-12 grid md:grid-cols-2 gap-6">
+          {tools.map((tool, i) => (
+            <motion.div
+              key={tool.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <Link to={tool.href}>
+                <Card className="glass border-0 p-6 h-full hover:translate-y-[-2px] hover:shadow-lg hover:shadow-purple-500/10 transition group cursor-pointer glow-purple">
+                  <div className="flex items-start justify-between">
+                    <div className="size-12 rounded-xl btn-gradient grid place-items-center">
+                      <tool.icon className="size-6 text-white" />
+                    </div>
+                    <Badge className="btn-gradient text-white border-0 flex items-center gap-1">
+                      <Coins className="size-3" /> {tool.credits} credits
+                    </Badge>
+                  </div>
+
+                  <h3 className="mt-4 font-display font-semibold text-xl">{tool.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{tool.desc}</p>
+
+                  <ul className="mt-4 space-y-2">
+                    {tool.features.map((f) => (
+                      <li key={f} className="flex items-center gap-2 text-sm">
+                        <Check className="size-4 text-primary shrink-0" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-6 flex items-center text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                    <span>Try it now</span>
+                    <ArrowRight className="size-4 ml-1 group-hover:translate-x-1 transition" />
+                  </div>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-sm text-muted-foreground">
+            Credit costs: <span className="font-medium text-foreground">Text 1</span> · <span className="font-medium text-foreground">Image 5</span> · <span className="font-medium text-foreground">Animation 20</span> · <span className="font-medium text-foreground">Video 30</span>
+          </p>
+        </div>
       </div>
     </section>
   );

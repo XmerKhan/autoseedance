@@ -23,11 +23,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AuthIndexRouteImport } from './routes/auth.index'
+import { Route as ToolsVideoRouteImport } from './routes/tools.video'
+import { Route as ToolsImageRouteImport } from './routes/tools.image'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
 import { Route as DashboardQueueRouteImport } from './routes/dashboard.queue'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardLibraryRouteImport } from './routes/dashboard.library'
+import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
 import { Route as DashboardExtensionRouteImport } from './routes/dashboard.extension'
+import { Route as DashboardCreditsRouteImport } from './routes/dashboard.credits'
 import { Route as DashboardBillingRouteImport } from './routes/dashboard.billing'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -103,6 +107,16 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
+const ToolsVideoRoute = ToolsVideoRouteImport.update({
+  id: '/tools/video',
+  path: '/tools/video',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsImageRoute = ToolsImageRouteImport.update({
+  id: '/tools/image',
+  path: '/tools/image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -123,9 +137,19 @@ const DashboardLibraryRoute = DashboardLibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardExtensionRoute = DashboardExtensionRouteImport.update({
   id: '/extension',
   path: '/extension',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCreditsRoute = DashboardCreditsRouteImport.update({
+  id: '/credits',
+  path: '/credits',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardBillingRoute = DashboardBillingRouteImport.update({
@@ -165,11 +189,15 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/credits': typeof DashboardCreditsRoute
   '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/tools/image': typeof ToolsImageRoute
+  '/tools/video': typeof ToolsVideoRoute
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -188,11 +216,15 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/credits': typeof DashboardCreditsRoute
   '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/tools/image': typeof ToolsImageRoute
+  '/tools/video': typeof ToolsVideoRoute
   '/auth': typeof AuthIndexRoute
   '/blog': typeof BlogIndexRoute
   '/dashboard': typeof DashboardIndexRoute
@@ -214,11 +246,15 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/credits': typeof DashboardCreditsRoute
   '/dashboard/extension': typeof DashboardExtensionRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
   '/dashboard/library': typeof DashboardLibraryRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/queue': typeof DashboardQueueRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
+  '/tools/image': typeof ToolsImageRoute
+  '/tools/video': typeof ToolsVideoRoute
   '/auth/': typeof AuthIndexRoute
   '/blog/': typeof BlogIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
@@ -241,11 +277,15 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dashboard/admin'
     | '/dashboard/billing'
+    | '/dashboard/credits'
     | '/dashboard/extension'
+    | '/dashboard/history'
     | '/dashboard/library'
     | '/dashboard/profile'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/tools/image'
+    | '/tools/video'
     | '/auth/'
     | '/blog/'
     | '/dashboard/'
@@ -264,11 +304,15 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dashboard/admin'
     | '/dashboard/billing'
+    | '/dashboard/credits'
     | '/dashboard/extension'
+    | '/dashboard/history'
     | '/dashboard/library'
     | '/dashboard/profile'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/tools/image'
+    | '/tools/video'
     | '/auth'
     | '/blog'
     | '/dashboard'
@@ -289,11 +333,15 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/dashboard/admin'
     | '/dashboard/billing'
+    | '/dashboard/credits'
     | '/dashboard/extension'
+    | '/dashboard/history'
     | '/dashboard/library'
     | '/dashboard/profile'
     | '/dashboard/queue'
     | '/dashboard/settings'
+    | '/tools/image'
+    | '/tools/video'
     | '/auth/'
     | '/blog/'
     | '/dashboard/'
@@ -312,6 +360,8 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   WorkspaceRoute: typeof WorkspaceRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  ToolsImageRoute: typeof ToolsImageRoute
+  ToolsVideoRoute: typeof ToolsVideoRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
 
@@ -415,6 +465,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/tools/video': {
+      id: '/tools/video'
+      path: '/tools/video'
+      fullPath: '/tools/video'
+      preLoaderRoute: typeof ToolsVideoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/image': {
+      id: '/tools/image'
+      path: '/tools/image'
+      fullPath: '/tools/image'
+      preLoaderRoute: typeof ToolsImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/settings': {
       id: '/dashboard/settings'
       path: '/settings'
@@ -443,11 +507,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLibraryRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/extension': {
       id: '/dashboard/extension'
       path: '/extension'
       fullPath: '/dashboard/extension'
       preLoaderRoute: typeof DashboardExtensionRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/credits': {
+      id: '/dashboard/credits'
+      path: '/credits'
+      fullPath: '/dashboard/credits'
+      preLoaderRoute: typeof DashboardCreditsRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/billing': {
@@ -496,7 +574,9 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface DashboardRouteChildren {
   DashboardAdminRoute: typeof DashboardAdminRoute
   DashboardBillingRoute: typeof DashboardBillingRoute
+  DashboardCreditsRoute: typeof DashboardCreditsRoute
   DashboardExtensionRoute: typeof DashboardExtensionRoute
+  DashboardHistoryRoute: typeof DashboardHistoryRoute
   DashboardLibraryRoute: typeof DashboardLibraryRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardQueueRoute: typeof DashboardQueueRoute
@@ -507,7 +587,9 @@ interface DashboardRouteChildren {
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAdminRoute: DashboardAdminRoute,
   DashboardBillingRoute: DashboardBillingRoute,
+  DashboardCreditsRoute: DashboardCreditsRoute,
   DashboardExtensionRoute: DashboardExtensionRoute,
+  DashboardHistoryRoute: DashboardHistoryRoute,
   DashboardLibraryRoute: DashboardLibraryRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardQueueRoute: DashboardQueueRoute,
@@ -532,6 +614,8 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   WorkspaceRoute: WorkspaceRoute,
   BlogSlugRoute: BlogSlugRoute,
+  ToolsImageRoute: ToolsImageRoute,
+  ToolsVideoRoute: ToolsVideoRoute,
   BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
