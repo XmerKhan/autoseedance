@@ -1,7 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/auth";
+import { ToolNavbar } from "@/components/tools/ToolNavbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import {
   Video, Loader as Loader2, Download, Heart, Trash2, Sparkles,
-  X, Plus, Upload, Play, Clock, Image as ImageIcon, Music
+  X, Plus, Upload, Play, Clock, Image as ImageIcon, Music, ArrowLeft
 } from "lucide-react";
 import type { Tables } from "@/integrations/supabase/types";
 
@@ -399,8 +400,10 @@ function VideoToolPage() {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-6xl mx-auto">
-      <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-background pt-14">
+      <ToolNavbar title="Video Generation" />
+      <div className="p-6 md:p-10 max-w-6xl mx-auto">
+      <div className="flex items-center gap-3 mb-6">
         <div className="size-10 rounded-xl btn-gradient grid place-items-center">
           <Video className="size-5 text-white" />
         </div>
@@ -410,13 +413,6 @@ function VideoToolPage() {
         </div>
         <Badge variant="outline" className="ml-auto">{CREDITS_PER_VIDEO} credits</Badge>
       </div>
-
-      {balance !== null && (
-        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <Sparkles className="size-4 text-primary" />
-          Balance: <span className="font-semibold text-foreground">{balance}</span> credits
-        </div>
-      )}
 
       <Card className="glass border-0 p-6 mt-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -842,6 +838,7 @@ function VideoToolPage() {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 }

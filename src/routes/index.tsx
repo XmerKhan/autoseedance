@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Sparkles, Zap, Layers, Workflow, ShieldCheck, Download, Chromium as Chrome, Play, ArrowRight, Check, Cpu, Bot, Clock, Image as ImageIcon, Video, Coins } from "lucide-react";
+import { Sparkles, Zap, Layers, Workflow, ShieldCheck, Download, Chromium as Chrome, Play, ArrowRight, Check, Cpu, Bot, Clock, Image as ImageIcon, Video, Coins, Activity } from "lucide-react";
 
 export const CHROME_STORE_URL = "https://chromewebstore.google.com/"; // TODO: replace with real listing URL
 export const EDGE_STORE_URL = "https://microsoftedge.microsoft.com/addons/"; // TODO: replace with real listing URL
@@ -78,16 +78,10 @@ function Landing() {
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <Hero />
-      <IntroBlock />
-      <LogosStrip />
-      <DemoSection />
-      <AIToolsSection />
       <Features />
-      <HowItWorks />
-      <SeoHowTo />
-      <SeoFeatures />
-      <SeoAudience />
-      <ComparisonTable />
+      <StatsSection />
+      <AIToolsSection />
+      <DemoSection />
       <ExtensionSection />
       <PricingTeaser />
       <FAQ />
@@ -222,7 +216,7 @@ function Hero() {
       <div className="mx-auto max-w-6xl px-4 text-center">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <Badge variant="outline" className="border-border bg-muted/50 backdrop-blur text-xs">
-            <Sparkles className="size-3 mr-1 text-primary" /> Chrome &amp; Edge Extension · Free during Early Access
+            <Sparkles className="size-3 mr-1 text-primary" /> AI Image &amp; Video Generation
           </Badge>
         </motion.div>
         <motion.h1
@@ -230,30 +224,30 @@ function Hero() {
           transition={{ duration: 0.6, delay: 0.05 }}
           className="mt-6 font-display text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]"
         >
-          The bridge between you
+          Create Stunning AI Images
           <br />
-          <span className="gradient-text">and your AI tools.</span>
+          <span className="gradient-text">&amp; Videos</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
         >
-          Queue hundreds of prompts, automate generation workflows, and streamline AI image &amp; video creation directly inside your browser.
+          Professional AI generation tools powered by advanced models. Generate, download, and share — no limits on creativity.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
           className="mt-9 flex flex-wrap justify-center gap-3"
         >
-          <Link to="/extension">
+          <Link to="/auth">
             <Button size="lg" className="btn-gradient text-white border-0 h-12 px-6 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition">
-              <Download className="mr-2 size-4" /> Install Extension
+              Start Free
             </Button>
           </Link>
-          <Link to="/dashboard">
+          <Link to="/pricing">
             <Button size="lg" variant="outline" className="h-12 px-6 border-border bg-muted/50 backdrop-blur hover:bg-muted transition">
-              Open Dashboard <ArrowRight className="ml-1 size-4" />
+              View Pricing <ArrowRight className="ml-1 size-4" />
             </Button>
           </Link>
         </motion.div>
@@ -351,6 +345,30 @@ function DemoSection() {
   );
 }
 
+function StatsSection() {
+  const stats = [
+    { value: "2K-4K", label: "Resolution" },
+    { value: "15s", label: "Max Video" },
+    { value: "50+", label: "AI Models" },
+    { value: "99.9%", label: "Uptime" },
+  ];
+
+  return (
+    <section className="py-16 border-t border-border bg-muted/10">
+      <div className="mx-auto max-w-6xl px-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <div className="text-3xl md:text-4xl font-display font-bold gradient-text">{s.value}</div>
+              <div className="mt-1 text-sm text-muted-foreground">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AIToolsSection() {
   const tools = [
     {
@@ -436,20 +454,17 @@ function AIToolsSection() {
 
 function Features() {
   const items = [
-    { icon: Workflow, title: "Bulk prompt queue", desc: "Paste hundreds of prompts and let the queue grind through them, 24/7." },
-    { icon: Bot, title: "Browser automation", desc: "Our extension drives Dreamina with your own logged-in account." },
-    { icon: Download, title: "Auto download library", desc: "Every output is saved, tagged, and previewable in your dashboard." },
-    { icon: Zap, title: "Fast & throttled", desc: "Smart pacing avoids rate limits while keeping throughput high." },
-    { icon: ShieldCheck, title: "Credentials stay local", desc: "Your AI account credentials never leave your browser." },
-    { icon: Cpu, title: "Built for creators", desc: "AI creator productivity tools for image and video workflows at scale." },
+    { icon: ImageIcon, title: "AI Image Generation", desc: "Generate stunning 2K/4K images from text prompts using Seedream AI" },
+    { icon: Video, title: "AI Video Generation", desc: "Create cinematic videos up to 15 seconds with audio using MiniMax" },
+    { icon: Chrome, title: "Bulk Extension", desc: "Automate bulk generation directly in your browser with our Chrome extension" },
   ];
   return (
     <section id="features" className="py-24 border-t border-border">
       <div className="mx-auto max-w-6xl px-4">
         <div className="text-center max-w-2xl mx-auto">
           <Badge variant="outline" className="border-border bg-muted/50">Features</Badge>
-          <h2 className="mt-4 font-display text-4xl font-bold">Everything a bulk AI creator needs.</h2>
-          <p className="mt-3 text-muted-foreground">A premium automation layer for the AI image and video tools you already use.</p>
+          <h2 className="mt-4 font-display text-4xl font-bold">Powerful AI generation at your fingertips</h2>
+          <p className="mt-3 text-muted-foreground">Create professional images and videos with cutting-edge AI models.</p>
         </div>
         <div className="mt-14 grid md:grid-cols-3 gap-5">
           {items.map((f, i) => (

@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { AlertCircle, Sparkles, Mail, Lock, Loader2 } from "lucide-react";
+import { CircleAlert as AlertCircle, Sparkles, Mail, Lock, Loader as Loader2, User, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
@@ -28,6 +28,7 @@ function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -48,6 +49,26 @@ function AuthPage() {
     setLoading(true);
     setErrorMessage(null);
     setNotice(null);
+
+    // Validation for signup
+    if (mode === "signup") {
+      if (!name.trim()) {
+        setErrorMessage("Please enter your name");
+        setLoading(false);
+        return;
+      }
+      if (password !== confirmPassword) {
+        setErrorMessage("Passwords do not match");
+        setLoading(false);
+        return;
+      }
+      if (password.length < 6) {
+        setErrorMessage("Password must be at least 6 characters");
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
       if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
@@ -118,7 +139,7 @@ function AuthPage() {
   return (
     <div className="min-h-screen grid-bg grid place-items-center px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        <Link to="/" className="flex items-center gap-2 justify-center mb-6 font-display font-bold text-xl">
+        <Link to="/" className="flex items-center justify-center gap-2 mb-6 font-display font-bold text-xl">
           <span className="size-9 rounded-lg btn-gradient grid place-items-center">
             <Sparkles className="size-5 text-white" />
           </span>
@@ -129,59 +150,141 @@ function AuthPage() {
             {mode === "signin" ? "Welcome back" : "Create your account"}
           </h1>
           <p className="text-sm text-muted-foreground text-center mt-1">
-            {mode === "signin" ? "Sign in to your dashboard" : "Start automating in minutes"}
+            {mode === "signin" ? "Sign in to access your tools" : "Start generating in minutes"}
           </p>
+
           {errorMessage && (
             <Alert variant="destructive" className="mt-5 bg-destructive/10">
               <AlertCircle className="size-4" />
               <AlertDescription>{errorMessage}</AlertDescription>
             </Alert>
           )}
+
           {notice && (
             <Alert className="mt-5 border-primary/30 bg-primary/10 text-foreground">
               <Mail className="size-4" />
               <AlertDescription>{notice}</AlertDescription>
             </Alert>
           )}
+
           <Button onClick={handleGoogle} disabled={loading} variant="outline" className="w-full mt-6 border-border bg-muted/50">
             <GoogleIcon /> Continue with Google
           </Button>
+
           <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
             <div className="h-px bg-muted flex-1" /> or <div className="h-px bg-muted flex-1" />
           </div>
+
           <form onSubmit={handleEmail} className="space-y-4">
             {mode === "signup" && (
               <div>
-                <Label>Display name</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Alex" required className="mt-1 bg-muted/50 border-border" />
+                <Label htmlFor="name">Full Name</Label>
+                <div className="relative mt-1">
+                  <User className="size-4 text-muted-foreground absolute left-3 top-3" />
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="John Doe"
+                    required
+                    className="pl-9 bg-muted/50 border-border"
+                    disabled={loading}
+                  />
+                </div>
               </div>
             )}
+
             <div>
-              <Label>Email</Label>
+              <Label htmlFor="email">Email</Label>
               <div className="relative mt-1">
                 <Mail className="size-4 text-muted-foreground absolute left-3 top-3" />
-                <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@studio.com" required className="pl-9 bg-muted/50 border-border" />
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                  className="pl-9 bg-muted/50 border-border"
+                  disabled={loading}
+                />
               </div>
             </div>
+
             <div>
-              <Label>Password</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative mt-1">
                 <Lock className="size-4 text-muted-foreground absolute left-3 top-3" />
-                <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required minLength={6} className="pl-9 bg-muted/50 border-border" />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  minLength={6}
+                  className="pl-9 bg-muted/50 border-border"
+                  disabled={loading}
+                />
               </div>
             </div>
+
+            {mode === "signup" && (
+              <div>
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative mt-1">
+                  <Lock className="size-4 text-muted-foreground absolute left-3 top-3" />
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                    minLength={6}
+                    className="pl-9 bg-muted/50 border-border"
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+            )}
+
+            {mode === "signin" && (
+              <div className="text-right">
+                <button
+                  type="button"
+                  className="text-xs text-primary hover:underline"
+                  onClick={() => toast.info("Password reset coming soon")}
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            )}
+
             <Button type="submit" disabled={loading} className="w-full btn-gradient text-white border-0">
               {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
               {mode === "signin" ? "Sign in" : "Create account"}
             </Button>
           </form>
+
           <p className="text-sm text-muted-foreground text-center mt-5">
-            {mode === "signin" ? "No account? " : "Already have an account? "}
-            <button onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="text-primary hover:underline">
+            {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
+            <button
+              onClick={() => {
+                setMode(mode === "signin" ? "signup" : "signin");
+                setErrorMessage(null);
+                setConfirmPassword("");
+              }}
+              className="text-primary hover:underline font-medium"
+            >
               {mode === "signin" ? "Sign up" : "Sign in"}
             </button>
           </p>
         </Card>
+
+        <Link to="/" className="flex items-center justify-center gap-1 mt-6 text-sm text-muted-foreground hover:text-foreground transition">
+          <ArrowLeft className="size-4" /> Back to home
+        </Link>
       </motion.div>
     </div>
   );
