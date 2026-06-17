@@ -32,6 +32,7 @@ const SUPABASE_URL = "https://vcercajwtbjbvjhzivjb.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZjZXJjYWp3dGJqYnZqaHppdmpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MDczMjYsImV4cCI6MjA5NzA4MzMyNn0.cqIvDEmF6Yyz7bdFQBSrl5DTzcpv6YOxF2zbrFqAs1k";
 
 const IMAGE_SIZES = [
+  { value: "auto_2K", label: "Auto 2K" },
   { value: "square_hd", label: "Square HD" },
   { value: "landscape_4_3", label: "Landscape (4:3)" },
   { value: "portrait_4_3", label: "Portrait (4:3)" },
@@ -54,7 +55,7 @@ function ImageToolPage() {
   const [userId, setUserId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text");
   const [prompt, setPrompt] = useState("");
-  const [imageSize, setImageSize] = useState("square_hd");
+  const [imageSize, setImageSize] = useState("auto_2K");
   const [style, setStyle] = useState("realistic");
   const [numImages, setNumImages] = useState(1);
   const [referenceImages, setReferenceImages] = useState<string[]>([]);
@@ -101,7 +102,7 @@ function ImageToolPage() {
     const files = e.target.files;
     if (!files) return;
     Array.from(files).forEach((file) => {
-      if (referenceImages.length >= 1) { toast.error("Maximum 1 reference image for edit mode"); return; }
+      if (referenceImages.length >= 10) { toast.error("Maximum 10 reference images"); return; }
       if (file.size > 10 * 1024 * 1024) { toast.error("File too large (max 10MB)"); return; }
       const reader = new FileReader();
       reader.onload = (event) => { const base64 = event.target?.result as string; if (base64) setReferenceImages((prev) => [...prev, base64]); };
@@ -111,7 +112,7 @@ function ImageToolPage() {
 
   const addUrl = useCallback(() => {
     if (!urlInput.trim()) return;
-    if (referenceImages.length >= 1) { toast.error("Maximum 1 reference image for edit mode"); return; }
+    if (referenceImages.length >= 10) { toast.error("Maximum 10 reference images"); return; }
     setReferenceImages((prev) => [...prev, urlInput.trim()]);
     setUrlInput("");
   }, [urlInput, referenceImages.length]);
@@ -145,7 +146,7 @@ function ImageToolPage() {
       if (genError || !genData) throw new Error("Failed to create generation record");
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 60000);
+      const timeoutId = setTimeout(() => controller.abort(), 70000);
 
       const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-image`, {
         method: "POST",
@@ -321,11 +322,11 @@ function ImageToolPage() {
 
           <div className="flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-muted-foreground mt-4">
             <ImageIcon className="size-4 text-amber-500" />
-            <span>Image generation takes ~20-30 seconds. Hang tight!</span>
+            <span>Image generation takes ~20-60 seconds. Hang tight!</span>
           </div>
 
           <Button onClick={handleGenerate} disabled={generating || !prompt.trim()} className="mt-6 btn-gradient text-white border-0">
-            {generating ? <><Loader2 className="size-4 mr-2 animate-spin" /> Generating your image... (20-30 seconds)</> : <><Sparkles className="size-4 mr-2" /> Generate ({CREDITS_PER_IMAGE * numImages} credits)</>}
+            {generating ? <><Loader2 className="size-4 mr-2 animate-spin" /> Generating your image...</> : <><Sparkles className="size-4 mr-2" /> Generate ({CREDITS_PER_IMAGE * numImages} credits)</>}
           </Button>
         </Card>
 

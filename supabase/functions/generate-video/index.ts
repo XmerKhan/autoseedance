@@ -3,98 +3,109 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Client-Info, Apikey",
+  "Access-Control-Allow-Headers": "content-type, authorization, x-client-info, apikey",
 };
 
-const FAL_API_KEY = Deno.env.get("FAL_API_KEY")!;
-
-Deno.serve(async (req: Request) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 200, headers: corsHeaders });
-  }
-
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    const FAL_API_KEY = Deno.env.get("FAL_API_KEY");
+    if (!FAL_API_KEY) {
+      return new Response(JSON.stringify({ error: "FAL_API_KEY not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json();
     const {
       prompt,
-      duration,
       resolution,
+      duration,
       aspect_ratio,
       generate_audio,
-      model_type,
-      first_frame_url,
-      last_frame_url,
-      reference_images,
-      reference_videos,
-      reference_audios,
+      image_urls,
+      video_urls,
+      audio_urls,
     } = body;
 
-    if (!prompt || typeof prompt !== "string") {
+    if (!prompt) {
       return new Response(JSON.stringify({ error: "Prompt is required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const isReference = model_type === "reference-to-video";
-    const modelPath = isReference
-      ? "fal-ai/bytedance/seedance-2.0/reference-to-video"
-      : "fal-ai/bytedance/seedance-2.0/text-to-video";
+    const hasReference = (image_urls?.length > 0) || (video_urls?.length > 0);
 
-    const falInput: Record<string, unknown> = {
-      prompt: prompt.trim(),
-      duration: duration || 5,
-      resolution: resolution || "720p",
-      aspect_ratio: aspect_ratio || "16:9",
-      generate_audio: generate_audio !== false,
-      seed: Math.floor(Math.random() * 1000000),
-    };
+    let modelId: string;
+    let falBody: Record<string, unknown>;
 
-    if (isReference) {
-      if (first_frame_url) falInput.first_frame_url = first_frame_url;
-      if (last_frame_url && first_frame_url) falInput.last_frame_url = last_frame_url;
-      if (reference_images?.length > 0) falInput.reference_images = reference_images.slice(0, 9);
-      if (reference_videos?.length > 0) falInput.reference_videos = reference_videos.slice(0, 3);
-      if (reference_audios?.length > 0) falInput.reference_audios = reference_audios.slice(0, 3);
+    if (hasReference) {
+      modelId = "bytedance/seedance-2.0/reference-to-video";
+      falBody = {
+        prompt,
+        image_urls: image_urls || [],
+        video_urls: video_urls || [],
+        audio_urls: audio_urls || [],
+        resolution: resolution || "720p",
+        duration: duration || "auto",
+        aspect_ratio: aspect_ratio || "auto",
+        generate_audio: generate_audio ?? true,
+        bitrate_mode: "standard",
+      };
+    } else {
+      modelId = "bytedance/seedance-2.0/text-to-video";
+      falBody = {
+        prompt,
+        resolution: resolution || "720p",
+        duration: duration || "auto",
+        aspect_ratio: aspect_ratio || "auto",
+        generate_audio: generate_audio ?? true,
+        bitrate_mode: "standard",
+        seed: Math.floor(Math.random() * 999999),
+      };
     }
 
-    const response = await fetch(`https://queue.fal.run/${modelPath}`, {
+    const endpoint = `https://queue.fal.run/${modelId}`;
+    console.log("Submitting video to:", endpoint);
+
+    const submitRes = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Authorization": `Key ${FAL_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(falInput),
+      body: JSON.stringify(falBody),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Fal.ai API error:", errorText);
-      throw new Error(`Fal.ai API error: ${response.status} ${errorText}`);
+    const submitText = await submitRes.text();
+    console.log("Video submit:", submitRes.status, submitText);
+
+    if (!submitRes.ok) {
+      return new Response(JSON.stringify({ error: `Fal.ai error: ${submitRes.status} - ${submitText}` }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    const result = await response.json();
+    const submitResult = JSON.parse(submitText);
 
     return new Response(JSON.stringify({
       success: true,
-      request_id: result.request_id,
-      model_type: isReference ? "reference-to-video" : "text-to-video",
-      status: result.status || "queued",
+      request_id: submitResult.request_id,
+      model_id: modelId,
+      status: "queued",
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-  } catch (error) {
-    console.error("Error in generate-video:", error);
-    return new Response(JSON.stringify({
-      error: error instanceof Error ? error.message : "Internal server error",
-    }), {
+
+  } catch (err) {
+    console.error("generate-video error:", err);
+    return new Response(JSON.stringify({ error: String(err) }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
