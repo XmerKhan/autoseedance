@@ -45,8 +45,8 @@ Deno.serve(async (req) => {
         seed: Math.floor(Math.random() * 999999),
       };
     }
-    console.log("Submitting to:", modelId);
-    console.log("Body:", JSON.stringify(falBody));
+    console.log("[generate-image] Submitting to:", modelId);
+    console.log("[generate-image] Body:", JSON.stringify(falBody));
     const submitRes = await fetch(`https://queue.fal.run/${modelId}`, {
       method: "POST",
       headers: {
@@ -56,19 +56,22 @@ Deno.serve(async (req) => {
       body: JSON.stringify(falBody),
     });
     const submitText = await submitRes.text();
-    console.log("Submit response:", submitRes.status, submitText);
+    console.log("[generate-image] Submit response:", submitRes.status, submitText);
     if (!submitRes.ok) throw new Error(`Fal.ai submit error: ${submitRes.status} - ${submitText}`);
     const submitData = JSON.parse(submitText);
+    // fal.ai returns status_url and response_url in the submit response
     return new Response(JSON.stringify({
       success: true,
       request_id: submitData.request_id,
+      status_url: submitData.status_url,
+      response_url: submitData.response_url,
       model_id: modelId,
       status: "queued",
     }), {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("generate-image error:", String(err));
+    console.error("[generate-image] Error:", String(err));
     return new Response(JSON.stringify({ error: String(err) }), {
       status: 500,
       headers: { ...cors, "Content-Type": "application/json" },

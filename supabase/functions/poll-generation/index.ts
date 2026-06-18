@@ -10,34 +10,51 @@ Deno.serve(async (req) => {
     if (!FAL_API_KEY) throw new Error("FAL_API_KEY missing");
     const bodyText = await req.text();
     if (!bodyText || bodyText.trim() === "") throw new Error("Empty request body");
-    const { request_id, model_id } = JSON.parse(bodyText);
-    if (!request_id) throw new Error("request_id required");
-    if (!model_id) throw new Error("model_id required");
-    console.log("Polling:", model_id, request_id);
-    const statusRes = await fetch(
-      `https://queue.fal.run/${model_id}/requests/${request_id}/status`,
-      { headers: { "Authorization": `Key ${FAL_API_KEY}` } }
-    );
+    const { status_url, response_url } = JSON.parse(bodyText);
+    if (!status_url) throw new Error("status_url required");
+    if (!response_url) throw new Error("response_url required");
+    console.log("[poll-generation] Polling status_url:", status_url);
+    // Check status - fal.ai uses GET method for status endpoint
+    const statusRes = await fetch(status_url, {
+      method: "GET",
+      headers: { "Authorization": `Key ${FAL_API_KEY}` },
+    });
     const statusText = await statusRes.text();
-    console.log("Status response:", statusText);
-    if (!statusText || statusText.trim() === "") {
-      return new Response(JSON.stringify({ status: "processing" }), {
+    console.log("[poll-generation] Status response:", statusRes.status, statusText);
+    if (!statusRes.ok) {
+      return new Response(JSON.stringify({
+        error: `Status check failed: ${statusRes.status} - ${statusText}`
+      }), {
+        status: 500,
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
     const statusData = JSON.parse(statusText);
     const status = statusData.status;
-    console.log("Status:", status);
+    console.log("[poll-generation] Status:", status);
     if (status === "COMPLETED") {
-      const resultRes = await fetch(
-        `https://queue.fal.run/${model_id}/requests/${request_id}`,
-        { headers: { "Authorization": `Key ${FAL_API_KEY}` } }
-      );
+      // Fetch result from response_url - fal.ai uses GET method for response endpoint
+      console.log("[poll-generation] Fetching result from response_url:", response_url);
+      const resultRes = await fetch(response_url, {
+        method: "GET",
+        headers: { "Authorization": `Key ${FAL_API_KEY}` },
+      });
       const resultText = await resultRes.text();
-      console.log("Result:", resultText);
+      console.log("[poll-generation] Result response:", resultRes.status, resultText);
+      if (!resultRes.ok) {
+        return new Response(JSON.stringify({
+          error: `Result fetch failed: ${resultRes.status} - ${resultText}`
+        }), {
+          status: 500,
+          headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
       const result = JSON.parse(resultText);
+      // Image result: { images: [{url}] }
+      // Video result: { video: {url} }
       const image_urls = result.images?.map((img: { url: string }) => img.url) || [];
       const video_url = result.video?.url || null;
+      console.log("[poll-generation] Completed. image_urls:", image_urls.length, "video_url:", !!video_url);
       return new Response(JSON.stringify({
         status: "completed",
         image_urls,
@@ -46,19 +63,25 @@ Deno.serve(async (req) => {
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    if (status === "FAILED") {
-      return new Response(JSON.stringify({ status: "failed" }), {
+    if (status === "FAILED" || statusData.error) {
+      console.log("[poll-generation] Failed:", statusData.error);
+      return new Response(JSON.stringify({
+        status: "failed",
+        error: statusData.error || "Generation failed",
+      }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    return new Response(JSON.stringify({ status: "processing" }), {
+    // IN_QUEUE or IN_PROGRESS
+    return new Response(JSON.stringify({
+      status: "processing",
+    }), {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("poll-generation error:", String(err));
+    console.error("[poll-generation] Error:", String(err));
     return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-      headers: { ...cors, "Content-Type": "application/json" },
+      status: 500, headers: { ...cors, "Content-Type": "application/json" },
     });
   }
 });

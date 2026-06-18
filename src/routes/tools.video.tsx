@@ -129,7 +129,9 @@ function VideoToolPage() {
       if (error) throw new Error(error.message);
       if (data?.error) throw new Error(data.error);
 
-      const { request_id, model_id } = data;
+      // Use the status_url and response_url returned by fal.ai
+      const { status_url, response_url } = data;
+      console.log("[video] Got status_url:", status_url, "response_url:", response_url);
       let pollCount = 0;
 
       pollingRef.current = setInterval(async () => {
@@ -143,9 +145,11 @@ function VideoToolPage() {
           return;
         }
         try {
-          const { data: pollData } = await supabase.functions.invoke("poll-generation", {
-            body: JSON.stringify({ request_id, model_id }),
+          const { data: pollData, error: pollError } = await supabase.functions.invoke("poll-generation", {
+            body: { status_url, response_url },
           });
+          if (pollError) { console.error("[video] Poll error:", pollError); return; }
+          console.log("[video] Poll:", pollCount, pollData?.status);
           if (pollData?.status === "completed" && pollData?.video_url) {
             if (pollingRef.current) clearInterval(pollingRef.current);
             pollingRef.current = null;
@@ -165,10 +169,10 @@ function VideoToolPage() {
             if (pollingRef.current) clearInterval(pollingRef.current);
             pollingRef.current = null;
             setIsGenerating(false);
-            toast.error("Video generation failed");
+            toast.error(pollData?.error || "Video generation failed");
           }
         } catch (e) {
-          console.error("Poll error:", e);
+          console.error("[video] Poll error:", e);
         }
       }, 5000);
     } catch (e: unknown) {

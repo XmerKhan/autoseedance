@@ -144,7 +144,9 @@ function ImageToolPage() {
       if (error) throw new Error(error.message);
       if (data?.error) throw new Error(data.error);
 
-      const { request_id, model_id } = data;
+      // Use the status_url and response_url returned by fal.ai
+      const { status_url, response_url } = data;
+      console.log("[image] Got status_url:", status_url, "response_url:", response_url);
       let pollCount = 0;
 
       pollingRef.current = setInterval(async () => {
@@ -157,9 +159,11 @@ function ImageToolPage() {
           return;
         }
         try {
-          const { data: pollData } = await supabase.functions.invoke("poll-generation", {
-            body: JSON.stringify({ request_id, model_id }),
+          const { data: pollData, error: pollError } = await supabase.functions.invoke("poll-generation", {
+            body: { status_url, response_url },
           });
+          if (pollError) { console.error("[image] Poll error:", pollError); return; }
+          console.log("[image] Poll:", pollCount, pollData?.status);
           if (pollData?.status === "completed") {
             if (pollingRef.current) clearInterval(pollingRef.current);
             pollingRef.current = null;
@@ -179,10 +183,10 @@ function ImageToolPage() {
             if (pollingRef.current) clearInterval(pollingRef.current);
             pollingRef.current = null;
             setIsGenerating(false);
-            toast.error("Generation failed — please try again");
+            toast.error(pollData?.error || "Generation failed — please try again");
           }
         } catch (e) {
-          console.error("Poll error:", e);
+          console.error("[image] Poll error:", e);
         }
       }, 3000);
     } catch (e: unknown) {
